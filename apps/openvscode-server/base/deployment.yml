@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openvscode-server
+  labels:
+    app: openvscode-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openvscode-server
+  template:
+    metadata:
+      labels:
+        app: openvscode-server
+    spec:
+      containers:
+        - name: openvscode-server
+          image: lscr.io/linuxserver/openvscode-server:latest
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: openvscode-server-config
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: openvscode-server-config-pvc

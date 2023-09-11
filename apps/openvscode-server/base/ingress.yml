@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: openvscode-server-ingress
+  labels:
+    app: openvscode-server-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: openvscode-server.kube.zibbp.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: openvscode-server
+                port:
+                  number: 3000
+  tls:
+    - hosts:
+        - openvscode-server.kube.zibbp.net
+      secretName: kube-zibbp-net-tls
